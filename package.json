@@ -19,6 +19,7 @@
   "homepage": "https://github.com/vinaybajjuri58/eCommerceBackend#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "lodash": "^4.17.21",
     "mongoose": "^5.12.4"
   },
   "devDependencies": {
