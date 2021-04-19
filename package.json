@@ -1,0 +1,27 @@
+{
+  "name": "ecommerce-backend",
+  "version": "1.0.0",
+  "description": "Backend for Ecommerce App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinaybajjuri58/eCommerceBackend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinaybajjuri58/eCommerceBackend/issues"
+  },
+  "homepage": "https://github.com/vinaybajjuri58/eCommerceBackend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
