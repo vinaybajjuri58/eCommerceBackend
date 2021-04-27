@@ -11,6 +11,12 @@ const PORT = 3000;
 app.use("/products", productRouter);
 app.use("/cart", cartRouter);
 app.use("/wishlist", wishlistRouter);
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Welcome to backend of ecommerce app",
+  });
+});
 // errorHandler
 app.use(errorHandler);
 // path not found handler
