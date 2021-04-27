@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const { productRouter } = require("./routes/product.routes");
 const { categoryRouter } = require("./routes/category.routes");
 const { cartRouter } = require("./routes/cart.routes");

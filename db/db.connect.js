@@ -1,16 +1,15 @@
 const mongoose = require("mongoose");
+const dbUrl = process.env.DB_URL;
 const initialiseDBConnection = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://vinay:neogCluster@123@cluster0.rb4jo.mongodb.net/demoCluster?retryWrites=true&w=majority",
-      {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-      }
-    );
+    await mongoose.connect(dbUrl, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    });
     console.log("DB connected successfully");
   } catch (err) {
     console.log("Error in establishing db connection");
+    console.error(err);
   }
 };
 module.exports = {
