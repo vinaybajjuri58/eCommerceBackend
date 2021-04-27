@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { Category } = require("./category.model");
 const productSchema = new Schema(
   {
     name: {
@@ -16,8 +15,20 @@ const productSchema = new Schema(
       required: "Add a decription to the product",
     },
     category: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
+      type: String,
+      required: "Add a category for the product",
+    },
+    inStock: {
+      type: Schema.Types.Boolean,
+      required: "is the product in stock or not ?",
+    },
+    speedDelivery: {
+      type: Schema.Types.Boolean,
+      required: "Is the product under speedDelivery ?",
+    },
+    imageUrl: {
+      type: Schema.Types.String,
+      required: "Please add the image Url of product",
     },
   },
   {
