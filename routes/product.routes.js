@@ -4,13 +4,12 @@ const {
 } = require("../controllers/paramHandlers.controller");
 const {
   getAllProducts,
-  saveAProduct,
   getProductById,
   updateProduct,
 } = require("../controllers/product.controller");
 const productRouter = express.Router();
 
-productRouter.route("/").get(getAllProducts).post(saveAProduct);
+productRouter.route("/").get(getAllProducts);
 
 productRouter.param("productId", productParamHandler);
 productRouter.route("/:productId").get(getProductById).post(updateProduct);

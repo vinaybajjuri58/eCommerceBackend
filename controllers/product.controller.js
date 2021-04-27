@@ -7,15 +7,7 @@ const getAllProducts = async (req, res) => {
     products,
   });
 };
-const saveAProduct = async (req, res) => {
-  const productDetails = req.body;
-  const newProduct = new Product(productDetails);
-  const savedProduct = await newProduct.save();
-  res.status(201).json({
-    success: true,
-    product: savedProduct,
-  });
-};
+
 const getProductById = (req, res) => {
   res.json({
     success: true,
@@ -34,7 +26,6 @@ const updateProduct = async (req, res) => {
 };
 module.exports = {
   getAllProducts,
-  saveAProduct,
   getProductById,
   updateProduct,
 };
