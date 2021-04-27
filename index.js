@@ -23,6 +23,6 @@ app.use(errorHandler);
 app.use(pathNotFound);
 
 initialiseDBConnection();
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
   console.log("Server started on port ", PORT);
 });
