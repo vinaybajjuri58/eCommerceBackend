@@ -30,7 +30,7 @@ const saveACategory = async (req, res) => {
 const addProductToCategory = async (req, res) => {
   const productDetails = req.body;
   const { category } = req;
-  const newProduct = new Product(productDetails);
+  const newProduct = new Product({ ...productDetails, category: category._id });
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();

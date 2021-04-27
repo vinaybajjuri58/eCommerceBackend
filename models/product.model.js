@@ -15,19 +15,20 @@ const productSchema = new Schema(
       required: "Add a decription to the product",
     },
     category: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "Category",
       required: "Add a category for the product",
     },
     inStock: {
-      type: Schema.Types.Boolean,
+      type: Boolean,
       required: "is the product in stock or not ?",
     },
     speedDelivery: {
-      type: Schema.Types.Boolean,
+      type: Boolean,
       required: "Is the product under speedDelivery ?",
     },
     imageUrl: {
-      type: Schema.Types.String,
+      type: String,
       required: "Please add the image Url of product",
     },
   },
