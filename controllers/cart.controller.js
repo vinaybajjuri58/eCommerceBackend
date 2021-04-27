@@ -41,13 +41,21 @@ const addCartItem = async (req, res) => {
 
 const updateCartItem = async (req, res) => {
   let { cartItem } = req;
-  const updateCartItem = req.body;
-  cartItem = extend(cartItem, updateCartItem);
-  const updatedCartItem = await cartItem.save();
-  res.json({
-    success: true,
-    cartItem: updatedCartItem,
-  });
+  const { quantity } = req.body;
+  if (quantity > 0) {
+    cartItem.quantity = quantity;
+    const updatedCartItem = await cartItem.save();
+    res.json({
+      success: true,
+      cartItem: updatedCartItem,
+    });
+  } else {
+    const updatedCartItem = await cartItem.remove();
+    res.json({
+      success: true,
+      cartItem: updatedCartItem,
+    });
+  }
 };
 const deleteCartItem = async (req, res) => {
   try {
