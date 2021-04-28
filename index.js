@@ -12,10 +12,10 @@ app.use(cors());
 app.use(express.json());
 const PORT = 3000;
 
-app.use("/products", productRouter);
-app.use("/cart", cartRouter);
-app.use("/wishlist", wishlistRouter);
-app.use("/categories", categoryRouter);
+app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/wishlist", wishlistRouter);
+app.use("/api/categories", categoryRouter);
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
