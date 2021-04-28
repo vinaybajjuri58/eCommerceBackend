@@ -1,6 +1,7 @@
 const { Category } = require("../models/category.model");
 const { Product } = require("../models/product.model");
 const mongoose = require("mongoose");
+const { extend } = require("lodash");
 
 const getAllCategories = async (req, res) => {
   const categories = await Category.find({});
@@ -44,8 +45,28 @@ const addProductToCategory = async (req, res) => {
     });
   } catch (err) {}
 };
+const updateCategory = async (req, res) => {
+  const updateCategory = req.body;
+  let { category } = req;
+  try {
+    category = extend(category, updateCategory);
+    const updatedCategory = await category.save();
+    res.status().json({
+      success: true,
+      message: "Updated product",
+      category: updatedCategory,
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Error in updating category details",
+      errMessage: err.errMessage,
+    });
+  }
+};
 module.exports = {
   getAllCategories,
   saveACategory,
   addProductToCategory,
+  updateCategory,
 };
