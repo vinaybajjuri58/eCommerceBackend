@@ -1,14 +1,17 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const cors = require("cors");
 const { productRouter } = require("./routes/product.routes");
 const { categoryRouter } = require("./routes/category.routes");
 const { cartRouter } = require("./routes/cart.routes");
 const { wishlistRouter } = require("./routes/wishlist.routes");
 const { errorHandler, pathNotFound } = require("./middleware/errorHandlers");
 const { initialiseDBConnection } = require("./db/db.connect");
+app.use(cors());
 app.use(express.json());
 const PORT = 3000;
+
 app.use("/products", productRouter);
 app.use("/cart", cartRouter);
 app.use("/wishlist", wishlistRouter);
