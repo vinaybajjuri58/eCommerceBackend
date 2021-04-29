@@ -27,7 +27,7 @@ const addWishlistItem = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Added a new Item to Wishlist",
-      WishlistItem: savedWishlistItem,
+      wishlistItem: savedWishlistItem,
     });
   } catch (err) {
     res.status(400).json({
