@@ -5,7 +5,7 @@ const getAllWishlistItems = async (req, res) => {
     wishlistItems = await Wishlist.find({}).populate("_id");
     const normalizedWishlistItems = wishlistItems.map((item) => {
       const { _id, ...doc } = item._id._doc;
-      return { id: _id, ...doc };
+      return { _id: _id, ...doc };
     });
     res.json({
       success: true,

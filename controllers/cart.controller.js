@@ -6,7 +6,7 @@ const getAllCartItems = async (req, res) => {
     cartItems = await Cart.find({}).populate("_id");
     const normalizedCartItems = cartItems.map((item) => {
       const { _id, ...doc } = item._id._doc;
-      return { id: _id, ...doc, quantity: item.quantity };
+      return { _id: _id, ...doc, quantity: item.quantity };
     });
     res.json({
       success: true,
