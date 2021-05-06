@@ -4,6 +4,7 @@ const {
   saveACategory,
   addProductToCategory,
   updateCategory,
+  getACategory,
 } = require("../controllers/category.controller");
 const {
   categoryParamHandler,
@@ -11,6 +12,6 @@ const {
 const categoryRouter = express.Router();
 categoryRouter.route("/").get(getAllCategories).post(saveACategory);
 categoryRouter.param("categoryId", categoryParamHandler);
-categoryRouter.route("/:categoryId").post(updateCategory);
+categoryRouter.route("/:categoryId").get(getACategory).post(updateCategory);
 categoryRouter.route("/:categoryId/products").post(addProductToCategory);
 module.exports = { categoryRouter };

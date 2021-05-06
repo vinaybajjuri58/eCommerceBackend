@@ -64,9 +64,16 @@ const updateCategory = async (req, res) => {
     });
   }
 };
+const getACategory = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    category: req.category,
+  });
+};
 module.exports = {
   getAllCategories,
   saveACategory,
   addProductToCategory,
   updateCategory,
+  getACategory,
 };

@@ -14,6 +14,10 @@ const productSchema = new Schema(
       type: String,
       required: "Add a decription to the product",
     },
+    author: {
+      type: String,
+      required: "Add a Author for the product",
+    },
     category: {
       type: Schema.Types.ObjectId,
       ref: "Category",

@@ -44,7 +44,7 @@ const wishlistParamHandler = async (req, res, next, wishlistId) => {
 };
 const categoryParamHandler = async (req, res, next, categoryId) => {
   try {
-    const category = await Category.findById(categoryId);
+    const category = await Category.findById(categoryId).populate("products");
     req.category = category;
     next();
   } catch (err) {
