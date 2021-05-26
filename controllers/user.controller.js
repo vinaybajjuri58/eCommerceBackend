@@ -12,8 +12,14 @@ const userSignUp = async (req, res) => {
       });
     }
     const hashPassword = await bcrypt.hash(password, 12);
-    const newUser = new User({ email, name, password: hashPassword });
-    const savedUser = newUser.save();
+    const newUser = new User({
+      email,
+      name,
+      password: hashPassword,
+      wishlist: [],
+      cart: [],
+    });
+    const savedUser = await newUser.save();
     return res.status(201).json({
       success: true,
       message: "User successfully registered",
@@ -34,14 +40,14 @@ const userSignUp = async (req, res) => {
 const userSignIn = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const userExists = User.findOne({ email });
+    const userExists = await User.findOne({ email: email });
     if (!userExists) {
       return res.status(400).json({
         success: false,
         message: "Email is not registered",
       });
     }
-    const validPassword = await bcrypt.compare(password);
+    const validPassword = await bcrypt.compare(password, userExists.password);
     if (!validPassword) {
       return res.status(400).json({
         success: false,
@@ -55,6 +61,7 @@ const userSignIn = async (req, res) => {
       token,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       success: false,
       message: "Error in logging process",

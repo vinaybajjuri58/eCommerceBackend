@@ -1,7 +1,7 @@
 const { extend } = require("lodash");
 const mongoose = require("mongoose");
 const { Cart } = require("../models/cart.model");
-const { User } = require("../models/user.model");
+
 const getAllCartItems = async (req, res) => {
   const user = req.user;
   let cartItems;
@@ -16,13 +16,15 @@ const getAllCartItems = async (req, res) => {
       cartItems: normalizedCartItems,
     });
   } catch (err) {
-    res.status(400).json({
+    console.log(err);
+    res.status(500).json({
       success: false,
       message: "Error in getting cart Items",
       errMessage: err.errMessage,
     });
   }
 };
+
 const addCartItem = async (req, res) => {
   const user = req.user;
   const cartItem = req.body;
@@ -66,6 +68,7 @@ const updateCartItem = async (req, res) => {
     });
   }
 };
+
 const deleteCartItem = async (req, res) => {
   let user = req.user;
   try {

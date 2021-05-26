@@ -1,8 +1,10 @@
 const { Wishlist } = require("../models/wishlist.model");
+const mongoose = require("mongoose");
 const getAllWishlistItems = async (req, res) => {
   let wishlistItems;
+  const user = req.user;
   try {
-    wishlistItems = await Wishlist.find({}).populate("_id");
+    wishlistItems = user.wishlist;
     const normalizedWishlistItems = wishlistItems.map((item) => {
       const { _id, ...doc } = item._id._doc;
       return { _id: _id, ...doc };
@@ -21,9 +23,15 @@ const getAllWishlistItems = async (req, res) => {
 };
 const addWishlistItem = async (req, res) => {
   const wishlistItem = req.body;
+  const user = req.user;
   const newWishlistItem = new Wishlist(wishlistItem);
   try {
-    const savedWishlistItem = await newWishlistItem.save();
+    const session = await mongoose.startSession();
+    await session.startTransaction();
+    const savedWishlistItem = await newWishlistItem.save({ session: session });
+    user.wishlist.push(savedWishlistItem._id);
+    await user.save({ session: session });
+    session.commitTransaction();
     res.status(201).json({
       success: true,
       message: "Added a new Item to Wishlist",
@@ -38,9 +46,15 @@ const addWishlistItem = async (req, res) => {
   }
 };
 const deleteWishlistItem = async (req, res) => {
+  const user = req.user;
   try {
     const { wishlistItem } = req;
-    await wishlistItem.remove();
+    const session = await mongoose.startSession();
+    await session.startTransaction();
+    user.wishlist.pull(wishlistItem._id);
+    await user.save({ session: session });
+    await wishlistItem.remove({ session: session });
+    session.commitTransaction();
     res.json({
       success: true,
       message: "Deleted  Wishlist Item",

@@ -1,6 +1,6 @@
 const { User } = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-export const authValidator = async (req, res, next) => {
+const authValidator = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     if (!token) {
@@ -9,14 +9,25 @@ export const authValidator = async (req, res, next) => {
         message: "User is not loggedIn",
       });
     }
-    const { userId } = jwt.verify(token, "shhhhh");
-    const user = User.findById(userId);
+    const { userId } = jwt.verify(token, process.env.KEY);
+    const user = await User.findById(userId)
+      .select("-password -__v")
+      .populate({
+        path: "cart",
+        populate: { path: "_id" },
+      })
+      .populate({
+        path: "wishlist",
+        populate: { path: "_id" },
+      });
+
     if (!user) {
       return res.status(400).json({
         success: false,
         message: "User Doesnt exist",
       });
     }
+    req.user = user;
     next();
   } catch (err) {
     return res.status(500).json({
