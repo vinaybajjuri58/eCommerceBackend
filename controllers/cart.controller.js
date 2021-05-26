@@ -1,9 +1,12 @@
 const { extend } = require("lodash");
+const mongoose = require("mongoose");
 const { Cart } = require("../models/cart.model");
+const { User } = require("../models/user.model");
 const getAllCartItems = async (req, res) => {
+  const user = req.user;
   let cartItems;
   try {
-    cartItems = await Cart.find({}).populate("_id");
+    cartItems = user.cart;
     const normalizedCartItems = cartItems.map((item) => {
       const { _id, ...doc } = item._id._doc;
       return { _id: _id, ...doc, quantity: item.quantity };
@@ -21,10 +24,16 @@ const getAllCartItems = async (req, res) => {
   }
 };
 const addCartItem = async (req, res) => {
+  const user = req.user;
   const cartItem = req.body;
   const newCartItem = new Cart(cartItem);
   try {
-    const savedCartItem = await newCartItem.save();
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    const savedCartItem = await newCartItem.save({ session: session });
+    user.cart.push(savedCartItem._id);
+    await user.save({ session: session });
+    await session.commitTransaction();
     res.status(201).json({
       success: true,
       message: "Added a new Item to cart",
@@ -58,9 +67,15 @@ const updateCartItem = async (req, res) => {
   }
 };
 const deleteCartItem = async (req, res) => {
+  let user = req.user;
   try {
     const { cartItem } = req;
-    await cartItem.remove();
+    const session = await mongoose.startSession();
+    await session.startTransaction();
+    await cartItem.remove({ session: session });
+    user.cart.pull(cartItem._id);
+    await user.save({ session: session });
+    await session.commitTransaction();
     res.json({
       success: true,
       message: "Deleted  cart Item",
