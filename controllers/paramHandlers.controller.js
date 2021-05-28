@@ -2,6 +2,7 @@ const { Product } = require("../models/product.model");
 const { Cart } = require("../models/cart.model");
 const { Wishlist } = require("../models/wishlist.model");
 const { Category } = require("../models/category.model");
+const { User } = require("../models/user.model");
 
 const productParamHandler = async (req, res, next, productId) => {
   try {
@@ -55,9 +56,25 @@ const categoryParamHandler = async (req, res, next, categoryId) => {
     });
   }
 };
+const userParamHandler = async (req, res, next, userId) => {
+  try {
+    const user = User.findById(userId)
+      .populate("wishlist")
+      .populate("cart")
+      .select("-password -__v");
+    req.user = user;
+    next();
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Error in getting User details",
+    });
+  }
+};
 module.exports = {
   productParamHandler,
   cartParamHandler,
   wishlistParamHandler,
   categoryParamHandler,
+  userParamHandler,
 };
