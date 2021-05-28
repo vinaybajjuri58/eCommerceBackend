@@ -56,7 +56,7 @@ const userSignIn = async (req, res) => {
     }
     const token = jwt.sign({ userId: userExists._id }, process.env.KEY);
     res.status(200).json({
-      success: false,
+      success: true,
       message: "LoggedIn successfully",
       token,
     });
