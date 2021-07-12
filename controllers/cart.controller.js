@@ -42,7 +42,7 @@ const addCartItem = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Added a new Item to cart",
-      cartItem: savedCartItem,
+      cartItem: { _id: savedCartItem.productId },
     });
   } catch (err) {
     console.log(err);
@@ -62,7 +62,7 @@ const updateCartItem = async (req, res) => {
     const updatedCartItem = await cartItem.save();
     res.json({
       success: true,
-      cartItem: updatedCartItem,
+      cartItem: { _id: updatedCartItem.productId },
     });
   } else {
     const updatedCartItem = await cartItem.remove();
@@ -86,7 +86,7 @@ const deleteCartItem = async (req, res) => {
     res.json({
       success: true,
       message: "Deleted  cart Item",
-      cartItem,
+      cartItem: { _id: cartItem.productId },
     });
   } catch (err) {
     res.json({

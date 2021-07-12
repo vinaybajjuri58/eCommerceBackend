@@ -37,7 +37,7 @@ const addWishlistItem = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Added a new Item to Wishlist",
-      wishlistItem: savedWishlistItem,
+      wishlistItem: { _id: savedWishlistItem.productId },
     });
   } catch (err) {
     console.log(err);
@@ -61,7 +61,7 @@ const deleteWishlistItem = async (req, res) => {
     res.json({
       success: true,
       message: "Deleted  Wishlist Item",
-      wishlistItem,
+      wishlistItem: { _id: wishlistItem.productId },
     });
   } catch (err) {
     console.log(err);
