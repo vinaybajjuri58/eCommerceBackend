@@ -14,11 +14,11 @@ const authValidator = async (req, res, next) => {
       .select("-password -__v")
       .populate({
         path: "cart",
-        populate: { path: "_id" },
+        populate: { path: "productId" },
       })
       .populate({
         path: "wishlist",
-        populate: { path: "_id" },
+        populate: { path: "productId" },
       });
 
     if (!user) {
