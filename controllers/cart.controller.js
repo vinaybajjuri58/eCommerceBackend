@@ -8,8 +8,8 @@ const getAllCartItems = async (req, res) => {
   try {
     cartItems = user.cart;
     const normalizedCartItems = cartItems.map((item) => {
-      const { productId, ...doc } = item.productId._doc;
-      return { _id: productId, ...doc, quantity: item.quantity };
+      const { quantity, productId } = item._doc;
+      return { _id: productId._id, quantity, ...productId._doc };
     });
     res.json({
       success: true,
@@ -36,7 +36,7 @@ const addCartItem = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     const savedCartItem = await newCartItem.save({ session: session });
-    user.cart.push(savedCartItem.productId);
+    user.cart.push(savedCartItem._id);
     await user.save({ session: session });
     await session.commitTransaction();
     res.status(201).json({
@@ -80,7 +80,7 @@ const deleteCartItem = async (req, res) => {
     const session = await mongoose.startSession();
     await session.startTransaction();
     await cartItem.remove({ session: session });
-    user.cart.pull(cartItem.productId);
+    user.cart.pull(cartItem._id);
     await user.save({ session: session });
     await session.commitTransaction();
     res.json({
