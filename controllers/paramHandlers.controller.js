@@ -19,7 +19,7 @@ const productParamHandler = async (req, res, next, productId) => {
 };
 const cartParamHandler = async (req, res, next, cartId) => {
   try {
-    const cartItem = await Cart.findById(cartId);
+    const cartItem = await Cart.findOne({ productId: cartId });
     req.cartItem = cartItem;
     next();
   } catch (err) {
@@ -32,7 +32,7 @@ const cartParamHandler = async (req, res, next, cartId) => {
 };
 const wishlistParamHandler = async (req, res, next, wishlistId) => {
   try {
-    const wishlistItem = await Wishlist.findById(wishlistId);
+    const wishlistItem = await Wishlist.findOne({ productId: wishlistId });
     req.wishlistItem = wishlistItem;
     next();
   } catch (err) {

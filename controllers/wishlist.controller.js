@@ -6,7 +6,7 @@ const getAllWishlistItems = async (req, res) => {
   try {
     wishlistItems = user.wishlist;
     const normalizedWishlistItems = wishlistItems.map((item) => {
-      const { productId, ...doc } = item._id._doc;
+      const { productId, ...doc } = item.productId._doc;
       return { _id: productId, ...doc };
     });
     res.json({
@@ -25,7 +25,6 @@ const addWishlistItem = async (req, res) => {
   const wishlistItem = req.body;
   const user = req.user;
   const newWishlistItem = new Wishlist({
-    ...wishlistItem,
     productId: wishlistItem._id,
   });
   try {
@@ -67,6 +66,7 @@ const deleteWishlistItem = async (req, res) => {
       wishlistItem,
     });
   } catch (err) {
+    console.log(err);
     res.json({
       success: false,
       message: "error in deleting a Wishlist Item",

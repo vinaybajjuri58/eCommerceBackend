@@ -8,7 +8,7 @@ const getAllCartItems = async (req, res) => {
   try {
     cartItems = user.cart;
     const normalizedCartItems = cartItems.map((item) => {
-      const { productId, ...doc } = item._id._doc;
+      const { productId, ...doc } = item.productId._doc;
       return { _id: productId, ...doc, quantity: item.quantity };
     });
     res.json({
@@ -28,7 +28,10 @@ const getAllCartItems = async (req, res) => {
 const addCartItem = async (req, res) => {
   const user = req.user;
   const cartItem = req.body;
-  const newCartItem = new Cart({ ...cartItem, productId: cartItem._id });
+  const newCartItem = new Cart({
+    productId: cartItem._id,
+    quantity: cartItem.quantity,
+  });
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -42,6 +45,7 @@ const addCartItem = async (req, res) => {
       cartItem: savedCartItem,
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       success: false,
       error: "Error in adding a new product to cart",
