@@ -8,8 +8,8 @@ const getAllCartItems = async (req, res) => {
   try {
     cartItems = user.cart;
     const normalizedCartItems = cartItems.map((item) => {
-      const { _id, ...doc } = item._id._doc;
-      return { _id: _id, ...doc, quantity: item.quantity };
+      const { productId, ...doc } = item._id._doc;
+      return { _id: productId, ...doc, quantity: item.quantity };
     });
     res.json({
       success: true,
@@ -28,12 +28,12 @@ const getAllCartItems = async (req, res) => {
 const addCartItem = async (req, res) => {
   const user = req.user;
   const cartItem = req.body;
-  const newCartItem = new Cart(cartItem);
+  const newCartItem = new Cart({ ...cartItem, productId: cartItem._id });
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
     const savedCartItem = await newCartItem.save({ session: session });
-    user.cart.push(savedCartItem._id);
+    user.cart.push(savedCartItem.productId);
     await user.save({ session: session });
     await session.commitTransaction();
     res.status(201).json({
@@ -76,7 +76,7 @@ const deleteCartItem = async (req, res) => {
     const session = await mongoose.startSession();
     await session.startTransaction();
     await cartItem.remove({ session: session });
-    user.cart.pull(cartItem._id);
+    user.cart.pull(cartItem.productId);
     await user.save({ session: session });
     await session.commitTransaction();
     res.json({

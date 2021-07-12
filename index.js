@@ -12,7 +12,7 @@ const { authValidator } = require("./middleware/authValidator");
 const { initialiseDBConnection } = require("./db/db.connect");
 app.use(cors());
 app.use(express.json());
-const PORT = 3000;
+const PORT = 5000;
 
 app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);

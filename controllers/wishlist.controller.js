@@ -6,8 +6,8 @@ const getAllWishlistItems = async (req, res) => {
   try {
     wishlistItems = user.wishlist;
     const normalizedWishlistItems = wishlistItems.map((item) => {
-      const { _id, ...doc } = item._id._doc;
-      return { _id: _id, ...doc };
+      const { productId, ...doc } = item._id._doc;
+      return { _id: productId, ...doc };
     });
     res.json({
       success: true,
@@ -24,13 +24,18 @@ const getAllWishlistItems = async (req, res) => {
 const addWishlistItem = async (req, res) => {
   const wishlistItem = req.body;
   const user = req.user;
-  const newWishlistItem = new Wishlist(wishlistItem);
+  const newWishlistItem = new Wishlist({
+    ...wishlistItem,
+    productId: wishlistItem._id,
+  });
   try {
     const session = await mongoose.startSession();
     await session.startTransaction();
     const savedWishlistItem = await newWishlistItem.save({ session: session });
-    user.wishlist.push(savedWishlistItem._id);
-    await user.save({ session: session });
+    if (!user.wishlist.includes(savedWishlistItem.productId)) {
+      user.wishlist.push(savedWishlistItem.productId);
+      await user.save({ session: session });
+    }
     session.commitTransaction();
     res.status(201).json({
       success: true,
@@ -38,6 +43,7 @@ const addWishlistItem = async (req, res) => {
       wishlistItem: savedWishlistItem,
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       success: false,
       error: "Error in adding a new product to Wishlist",
@@ -51,7 +57,7 @@ const deleteWishlistItem = async (req, res) => {
     const { wishlistItem } = req;
     const session = await mongoose.startSession();
     await session.startTransaction();
-    user.wishlist.pull(wishlistItem._id);
+    user.wishlist.pull(wishlistItem.productId);
     await user.save({ session: session });
     await wishlistItem.remove({ session: session });
     session.commitTransaction();
